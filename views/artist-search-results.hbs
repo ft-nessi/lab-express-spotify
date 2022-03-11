@@ -1,6 +1,8 @@
 
 {{#each artistArr}}
-    <h1>{{this.name}}</h1>
-    <button action="submit" >Hey Submit!</button>
-    <img src="{{this.image}}" alt="Album Image" width="10px">
+    <form action="/albums/:artistId">
+        <h1>{{this.name}}</h1>
+        <button action="submit"><a href="/albums/{{this.id}}">View Albums</a></button>
+        <img src="{{this.image}}" alt="Album Image">
+    </form>
 {{/each}}

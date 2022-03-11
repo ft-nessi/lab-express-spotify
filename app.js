@@ -31,27 +31,49 @@ spotifyApi
 app.get("/", (req, res) => {
   res.render("index");
 });
+
 app.get("/artist-search", async (req, res) => {
   //console.log(req.query.artistName);
   const apiRes = await spotifyApi.searchArtists(req.query.artistName);
   const items = apiRes.body.artists.items;
-
   let artistArr = [];
 
   for (let i = 0; i < items.length; i++) {
-    let artistObj = {name:"", image:""};
+    let artistObj = { name: "", image: "", id: "" };
     artistObj.name = items[i].name;
+    artistObj.id = items[i].id;
+
     if (items[i].images.length > 0) {
-        artistObj.image = items[i].images[0].url;
+      artistObj.image = items[i].images[0].url;
     }
     artistArr.push(artistObj);
-}
-console.log("I'm the Arr",artistArr)
-
+  }
+  //console.log("I'm the Arr", artistArr);
 
   res.render("artist-search-results", {
-    artistArr
+    artistArr,
   });
+});
+
+app.get("/albums/:artistId", async (req, res, next) => {
+  //console.log(req.params.artistId);
+
+  const artistAlbums = await spotifyApi.getArtistAlbums(req.params.artistId);
+  let albumArr = [];
+  const items = artistAlbums.body.items;
+  console.log(items);
+  for (let i = 0; i < items.length; i++) {
+    let albumObj = { img: "", name: "" };
+    if (albumObj.name === "") {
+      albumObj.img = items[i].images[0].url;
+      albumObj.name = items[i].name;
+      albumArr.push(albumObj);
+    }
+  }
+  res.render("albums", {
+    albumArr,
+  });
+  //console.log(albumArr);
 });
 
 app.listen(3000, () =>
