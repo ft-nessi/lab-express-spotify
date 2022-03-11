@@ -34,10 +34,24 @@ app.get("/", (req, res) => {
 app.get("/artist-search", async (req, res) => {
   //console.log(req.query.artistName);
   const apiRes = await spotifyApi.searchArtists(req.query.artistName);
+  const items = apiRes.body.artists.items;
+
+  let artistArr = [];
+
+  for (let i = 0; i < items.length; i++) {
+    let artistObj = {name:"", image:""};
+    artistObj.name = items[i].name;
+    if (items[i].images.length > 0) {
+        artistObj.image = items[i].images[0].url;
+    }
+    artistArr.push(artistObj);
+}
+console.log("I'm the Arr",artistArr)
+
+
   res.render("artist-search-results", {
-    imageUrl: apiRes.body.artists.items[0].images[0].url,
+    artistArr
   });
-  //console.log(apiRes.body.artists.items[0].images[0].url);
 });
 
 app.listen(3000, () =>

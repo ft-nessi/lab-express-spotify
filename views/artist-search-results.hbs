@@ -1,3 +1,6 @@
-{{#each imageUrl}}
-    <img src="{{this}}" alt="Album Image">
+
+{{#each artistArr}}
+    <h1>{{this.name}}</h1>
+    <button action="submit" >Hey Submit!</button>
+    <img src="{{this.image}}" alt="Album Image" width="10px">
 {{/each}}
